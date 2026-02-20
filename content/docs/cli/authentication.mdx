@@ -1,0 +1,85 @@
+---
+title: Authentication
+description: Log in, log out, and manage credentials with the Strayl CLI.
+---
+
+## st login
+
+Authenticate the CLI with your Strayl account.
+
+```bash
+st login
+```
+
+This opens your browser to complete OAuth. Once complete, the token is saved to `~/.strayl/config.json`.
+
+### Options
+
+| Flag | Description |
+|------|-------------|
+| `--token <token>` | Authenticate with a personal access token (non-interactive) |
+| `--browser` | Force browser-based login (default) |
+
+### Token-based login
+
+For CI/CD environments where browser auth isn't possible:
+
+```bash
+st login --token <your-personal-access-token>
+```
+
+Create personal access tokens in your account settings at [app.strayl.dev](https://app.strayl.dev).
+
+## st logout
+
+Remove stored credentials from the local machine.
+
+```bash
+st logout
+```
+
+This deletes the token from `~/.strayl/config.json`. Your account and projects are unaffected.
+
+## st whoami
+
+Show the currently authenticated user.
+
+```bash
+st whoami
+```
+
+**Output:**
+
+```
+Authenticated as: alex@example.com (Alex Johnson)
+Default project: my-app (proj_abc123)
+```
+
+## CI/CD authentication
+
+For automated environments, use environment variables instead of the config file:
+
+```bash
+STRAYL_TOKEN=<your-token> st push
+```
+
+Or set it permanently in your CI environment variables.
+
+### GitHub Actions example
+
+```yaml
+- name: Deploy to Strayl
+  env:
+    STRAYL_TOKEN: ${{ secrets.STRAYL_TOKEN }}
+  run: |
+    npm install -g @strayl/cli
+    st push --project ${{ vars.STRAYL_PROJECT_ID }}
+```
+
+## Token expiry
+
+Personal access tokens can be set to expire. The CLI will warn you 7 days before expiry:
+
+```
+Warning: Your Strayl token expires in 5 days. Renew it at app.strayl.dev/settings/tokens
+```

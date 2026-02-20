@@ -1,0 +1,83 @@
+---
+title: Deployments
+description: Deploy your app to production, configure custom domains, and roll back instantly.
+---
+
+Every time you merge Changes, Strayl creates a **Deployment** — a production-ready build of your app with a permanent URL.
+
+## Triggering a deployment
+
+Deployments are triggered by:
+
+1. **Merging Changes** from the UI — click **Deploy** in the Changes panel
+2. **Pushing from the CLI** — `st push` merges and deploys in one command
+3. **Auto-deploy** — enable auto-deploy to trigger on every accepted Change
+
+## Deployment URLs
+
+Each deployment gets:
+
+- A **permanent URL** — `https://[project-id]-[deployment-id].strayl.app`
+- An **alias** — the live URL for the current production deployment: `https://[project-name].strayl.app`
+
+When you deploy, the alias is updated to point to the new deployment. Previous deployments remain accessible at their permanent URLs.
+
+## Custom domains
+
+Connect your own domain to a Strayl project:
+
+<Steps>
+
+### Add your domain
+
+Go to **Manage → Domains** and enter your domain (e.g., `app.yourcompany.com`).
+
+### Configure DNS
+
+Strayl will show you a CNAME record to add to your DNS provider:
+
+```
+CNAME  app.yourcompany.com  [your-project].strayl.app
+```
+
+### Verify
+
+Once DNS propagates (typically 1–5 minutes), your domain is live with automatic HTTPS.
+
+</Steps>
+
+## Rollback
+
+Every deployment is preserved. To roll back:
+
+1. Go to **Manage → Deployments**
+2. Find the deployment you want to restore
+3. Click **Promote to Production**
+
+The alias immediately points to the selected deployment. Your code doesn't change — the rollback is instant (just a pointer update).
+
+## Build configuration
+
+Strayl auto-detects your framework and runs the appropriate build command:
+
+| Framework | Build command | Output |
+|-----------|--------------|--------|
+| Next.js | `next build` | `.next/` |
+| Vite | `vite build` | `dist/` |
+| Create React App | `react-scripts build` | `build/` |
+| Remix | `remix build` | `build/` |
+
+Override these in **Manage → Settings → Build**.
+
+## Build logs
+
+View build logs in real time in **Manage → Deployments → [deployment] → Logs**. If a build fails, the previous deployment remains active and you'll see the error in the logs.
+
+## Environment-specific deployments
+
+Strayl supports two environments:
+
+- **Production** — the live deployment served at your domain
+- **Preview** — the sandbox dev server, accessible at a preview URL
+
+Environment variables can be scoped per environment. See [Environment Variables](/docs/platform/environment-vars).

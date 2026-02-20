@@ -1,0 +1,92 @@
+---
+title: Databases
+description: Neon Postgres databases — provisioning, branching, and connection strings.
+---
+
+Every Strayl project gets a **Neon Postgres** database. Neon is a serverless Postgres provider with branching support — you can create an isolated copy of your database for the AI to experiment with, then merge or discard it.
+
+## Automatic provisioning
+
+When you create a project, Strayl provisions a Neon database automatically. You don't need to configure anything — the `DATABASE_URL` environment variable is set in the sandbox and your production environment from day one.
+
+## Accessing the database
+
+### From your app
+
+Use the `DATABASE_URL` environment variable:
+
+```ts
+import { Pool } from 'pg';
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+```
+
+### From the Manage panel
+
+Go to **Manage → Database**. You'll see:
+
+- Connection string (click to reveal)
+- A query console for running SQL
+- Table explorer
+- Branch management
+
+### From the CLI
+
+```bash
+# Get the connection string
+st db connection-string
+
+# Open an interactive psql session
+st db psql
+```
+
+## Database branches
+
+Neon supports **database branches** — isolated copies of your database with their own connection string. Strayl creates branches automatically when the AI agent runs schema migrations:
+
+1. Agent creates a branch from `main`
+2. Runs the migration on the branch
+3. You review the Change (including the migration)
+4. On merge, the branch migration is applied to `main`
+5. The branch is deleted
+
+This means database migrations are safe to experiment with — the agent can't break your production database.
+
+## Creating branches manually
+
+```bash
+# Create a branch
+st db branch create my-feature
+
+# List branches
+st db branch list
+
+# Delete a branch
+st db branch delete my-feature
+```
+
+## Migrations
+
+Strayl supports any migration tool. The agent will use whatever you have set up:
+
+- **Drizzle ORM** — `drizzle-kit push` or `drizzle-kit migrate`
+- **Prisma** — `prisma migrate deploy`
+- **Raw SQL** — the agent writes SQL files and runs `psql`
+
+## Backups and storage
+
+Neon provides:
+
+- Continuous point-in-time recovery (PITR) up to 30 days
+- Automatic backups
+- Storage scales automatically — you pay for what you use
+
+## Limits
+
+| Plan | Storage | Compute |
+|------|---------|---------|
+| Free | 512 MB | 0.25 vCPU |
+| Pro | 10 GB | 2 vCPU |
+| Team | Unlimited | 8 vCPU |

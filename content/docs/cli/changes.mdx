@@ -1,0 +1,112 @@
+---
+title: Changes
+description: List and inspect AI-generated changes from the CLI.
+---
+
+The Strayl CLI lets you view and manage Changes (AI-generated diffs) without opening the browser.
+
+## st changes
+
+List all Changes in the current project.
+
+```bash
+st changes
+```
+
+**Output:**
+
+```
+ID         Status    Description                              Files  Date
+─────────────────────────────────────────────────────────────────────────
+chg_abc3   accepted  Add dark mode toggle to settings page   2      2m ago
+chg_abc2   accepted  Create settings page with profile form  4      1h ago
+chg_abc1   accepted  Set up Tailwind CSS configuration       3      3h ago
+```
+
+### Options
+
+| Flag | Description |
+|------|-------------|
+| `--status <status>` | Filter by status: `pending`, `accepted`, `rejected` |
+| `--limit <n>` | Show only the last N changes (default: 20) |
+| `--json` | Output as JSON |
+
+### Examples
+
+```bash
+# Show only pending changes
+st changes --status pending
+
+# Get changes as JSON (useful for scripting)
+st changes --json
+```
+
+## st change \<id\>
+
+Show details of a specific change including the full diff.
+
+```bash
+st change chg_abc3
+```
+
+**Output:**
+
+```
+Change: chg_abc3
+Status: accepted
+Description: Add dark mode toggle to settings page
+Author: AI Agent
+Date: 2024-01-15 14:32:00
+
+Files changed (2):
+  M  app/settings/page.tsx
+  M  components/theme-toggle.tsx
+
+─── app/settings/page.tsx ──────────────────────────────────────
+@@ -12,6 +12,9 @@
+   return (
+     <div className="settings-page">
++      <div className="flex items-center gap-2">
++        <ThemeToggle />
++      </div>
+       <UserProfile />
+     </div>
+   );
+```
+
+### Options
+
+| Flag | Description |
+|------|-------------|
+| `--diff` | Show the full diff (default: show summary) |
+| `--file <path>` | Show diff for a specific file only |
+| `--json` | Output as JSON |
+
+## Accepting and rejecting from the CLI
+
+```bash
+# Accept a change
+st change chg_abc3 --accept
+
+# Reject a change
+st change chg_abc3 --reject
+
+# Accept a specific file within a change
+st change chg_abc3 --accept --file app/settings/page.tsx
+```
+
+## Scripting with Changes
+
+Use `--json` to integrate with scripts:
+
+```bash
+# Get all pending changes as JSON
+PENDING=$(st changes --status pending --json)
+
+# Count pending changes
+echo $PENDING | jq 'length'
+
+# Get the latest change ID
+LATEST=$(st changes --limit 1 --json | jq -r '.[0].id')
+st change $LATEST --diff
+```

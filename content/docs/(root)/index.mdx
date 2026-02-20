@@ -1,0 +1,49 @@
+---
+title: What is Strayl?
+description: Strayl is an AI-powered development platform that lets you build, deploy, and manage full-stack apps through natural language.
+---
+
+**Strayl** is an AI-powered development platform. You describe what you want to build — Strayl’s AI agent writes the code, runs it in an isolated sandbox, and deploys it to a live URL. No manual setup. No infrastructure overhead.
+
+## Who is it for?
+
+Strayl is built for developers who want to:
+
+- **Ship faster** — go from idea to production in minutes, not days
+- **Focus on product** — let AI handle boilerplate, configuration, and deployment
+- **Stay in control** — review every diff, merge selectively, roll back instantly
+- **Work with existing code** — import any GitHub repository and keep building
+
+## How it works
+
+<Steps>
+
+### Describe your feature
+
+Chat with the AI agent in natural language: "Add a user settings page with dark mode toggle." The agent breaks the work into a plan and starts coding.
+
+### Review the changes
+
+Every AI action produces a **Change** — a stacked diff you can inspect in the Code View. Review line-by-line, accept selectively, or ask the agent to revise.
+
+### Deploy to production
+
+When you’re happy, click **Merge** (or use `st push` from the CLI). Strayl deploys your changes to a live URL with zero-downtime rollout.
+
+</Steps>
+
+## Core concepts
+
+| Concept | Description |
+|---------|-------------|
+| **Project** | A sandboxed workspace containing your codebase, environment, and deployment |
+| **Change** | A stacked diff produced by the AI or a direct edit — the atomic unit of code review |
+| **Deployment** | A live version of your app reachable at a public URL |
+| **Database** | A Neon Postgres instance provisioned per project with branching support |
+| **Plan Mode** | Agent planning step where you approve the task before code is written |
+
+## Next steps
+
+- [**Quickstart**](/docs/quickstart) — deploy your first app in 5 minutes
+- [**Platform overview**](/docs/platform/overview) — understand all platform features
+- [**CLI reference**](/docs/cli/overview) — use Strayl from your terminal

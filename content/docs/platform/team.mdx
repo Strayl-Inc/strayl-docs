@@ -1,0 +1,75 @@
+---
+title: Team & Roles
+description: Invite team members and manage access to your Strayl projects.
+---
+
+Strayl supports team collaboration on projects. Each team member has a role that determines what they can do.
+
+## Roles
+
+| Role | Permissions |
+|------|-------------|
+| **Owner** | Full access: invite, remove, delete project, manage billing |
+| **Admin** | Manage members, configure settings, deploy |
+| **Developer** | Chat with AI, accept Changes, deploy |
+| **Viewer** | Read-only access to Code View and deployments |
+
+## Inviting members
+
+<Steps>
+
+### Open Team settings
+
+Go to **Manage → Team**.
+
+### Send an invitation
+
+Enter the email address and select a role. Click **Send Invite**.
+
+### Member accepts
+
+The invited person receives an email. They click the link, create an account (or log in), and gain access to the project.
+
+</Steps>
+
+## Managing access
+
+From **Manage → Team**, you can:
+
+- **Change role** — click the role badge next to a member's name
+- **Remove member** — click the `···` menu → Remove
+- **Cancel a pending invite** — click Cancel next to an unaccepted invitation
+
+## Personal access tokens
+
+For CLI and API access, each user has personal access tokens:
+
+1. Go to your account settings (top right → Settings)
+2. Click **Access Tokens → New Token**
+3. Give it a name and set an expiry
+4. Copy the token — it won't be shown again
+
+Use the token with the CLI:
+
+```bash
+st login --token <your-token>
+```
+
+Or as an HTTP header:
+
+```
+Authorization: Bearer <your-token>
+```
+
+## Audit log
+
+Owners and Admins can view the audit log in **Manage → Team → Audit Log**. The log records:
+
+- Who changed what environment variables
+- Who triggered which deployments
+- Who invited or removed team members
+- Who merged Changes
+
+## Organization accounts
+
+For larger teams, Strayl supports Organization accounts that group multiple projects under a single billing entity with shared member management.

@@ -1,0 +1,71 @@
+---
+title: AI Agent
+description: How the Strayl AI agent works — models, streaming reasoning, and context.
+---
+
+The Strayl AI agent is the core of the platform. It reads your codebase, interprets your instructions, writes code, runs commands, and iterates based on results — all in a continuous loop until the task is complete.
+
+## How the agent works
+
+The agent follows a **ReAct** loop:
+
+1. **Reason** — think about the current task and what needs to be done
+2. **Act** — call a tool (write a file, run a command, search the codebase)
+3. **Observe** — read the tool output
+4. **Repeat** — continue until the task is complete or human input is needed
+
+This loop runs transparently in the Chat panel. You can watch the agent's reasoning stream in real time.
+
+## Streaming reasoning
+
+Strayl streams the agent's thinking as it works. You'll see:
+
+- The agent's step-by-step reasoning before each action
+- Tool calls with their inputs and outputs
+- A final summary of what was done
+
+This transparency lets you catch mistakes early and course-correct with a follow-up message.
+
+## Context window
+
+The agent maintains context across your entire session. It knows:
+
+- The full directory structure of your project
+- The content of files it has read
+- The complete conversation history
+- Results of previous commands
+
+For large codebases, the agent uses smart context retrieval — searching for relevant files rather than loading everything at once.
+
+## Available tools
+
+The agent has access to the following tools inside the sandbox:
+
+| Tool | Description |
+|------|-------------|
+| `ls` | List directory contents |
+| `read` | Read a file |
+| `write` | Write or create a file |
+| `edit` | Make targeted edits to a file |
+| `grep` | Search file contents |
+| `glob` | Find files by pattern |
+| `exec` | Run any shell command |
+| `getLogs` | Read dev server or process logs |
+| `showPreview` | Open the live preview in the browser |
+| `deleteFile` | Delete a file or directory |
+| `moveFile` | Move or rename a file |
+
+## Model selection
+
+You can switch the underlying model from the chat toolbar. Strayl supports multiple frontier models. The default is optimized for coding tasks.
+
+**Tips for getting the best results:**
+
+- Be specific about what you want ("Add a `POST /api/users` endpoint that validates email with Zod") rather than vague ("Add an API")
+- If the agent goes in the wrong direction, say "Stop. Revert that and instead..." — the agent understands corrections
+- For large refactors, use Plan Mode first to review the approach
+- Paste error messages directly — the agent reads stack traces and fixes them
+
+## Interrupting the agent
+
+If the agent is doing something wrong, type a new message to interrupt it. The current tool call will complete, then the agent will read your correction and adjust.

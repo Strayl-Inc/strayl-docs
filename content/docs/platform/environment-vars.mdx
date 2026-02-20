@@ -1,0 +1,94 @@
+---
+title: Environment Variables
+description: Manage secrets and configuration for your Strayl projects.
+---
+
+**Environment variables** let you store secrets (API keys, database URLs, tokens) and configuration values outside your code. Strayl manages them per project and per environment.
+
+## Adding variables
+
+Go to **Manage → Environment Variables** and click **Add Variable**:
+
+1. Enter the **Key** — e.g., `STRIPE_SECRET_KEY`
+2. Enter the **Value** — e.g., `sk_live_...`
+3. Choose the **Environment**:
+   - **Production** — available in deployed builds
+   - **Preview** — available in the sandbox dev server
+   - **Both** — available in both
+
+## Variable scoping
+
+| Scope | Available in |
+|-------|-------------|
+| Production | Live deployments only |
+| Preview | Sandbox dev server only |
+| Both | All environments |
+
+## Pre-set variables
+
+Strayl automatically sets the following variables in every project:
+
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | Neon Postgres connection string |
+| `NODE_ENV` | `development` (preview) or `production` |
+| `NEXT_PUBLIC_APP_URL` | The current deployment URL |
+
+## Accessing in code
+
+Variables are available via `process.env` as usual:
+
+```ts
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+```
+
+For Next.js, prefix with `NEXT_PUBLIC_` to expose variables to the browser:
+
+```ts
+// This is available client-side
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+```
+
+## Bulk import
+
+Import variables from a `.env` file by clicking **Import .env**:
+
+```bash
+STRIPE_SECRET_KEY=sk_live_...
+RESEND_API_KEY=re_...
+OPENAI_API_KEY=sk-...
+```
+
+## CLI
+
+```bash
+# List all variables
+st env list
+
+# Set a variable
+st env set STRIPE_SECRET_KEY=sk_live_...
+
+# Set for production only
+st env set STRIPE_SECRET_KEY=sk_live_... --env production
+
+# Delete a variable
+st env delete STRIPE_SECRET_KEY
+```
+
+## Security
+
+- Variables are encrypted at rest
+- Values are never shown in logs
+- The AI agent cannot read variable values — it can only see the variable names
+- Team members need explicit permission to view sensitive variables
+
+## Using the AI agent with env vars
+
+The agent knows your variable names (not values). You can ask it:
+
+```
+Add Stripe checkout. Use STRIPE_SECRET_KEY for the API and
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY for the client.
+```
+
+The agent will write code using these variable names. You set the actual values separately.

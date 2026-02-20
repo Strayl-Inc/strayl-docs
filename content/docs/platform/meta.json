@@ -1,0 +1,15 @@
+{
+  "pages": [
+    "overview",
+    "projects",
+    "agent",
+    "plan-mode",
+    "changes",
+    "code-view",
+    "deployments",
+    "databases",
+    "environment-vars",
+    "team"
+  ],
+  "title": "Platform"
+}

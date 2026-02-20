@@ -1,0 +1,56 @@
+---
+title: Platform Overview
+description: The Strayl platform — Chat, Code, and Manage in one unified workspace.
+---
+
+The Strayl platform is organized around three panels: **Chat**, **Code**, and **Manage**. Together they give you a complete development environment that runs entirely in the browser, backed by an AI agent and an isolated cloud sandbox.
+
+## The three panels
+
+### Chat
+
+The Chat panel is where you interact with the AI agent. Write plain English descriptions of what you want to build, and the agent translates them into code changes. The agent maintains context across your entire session — it knows your tech stack, the files you've touched, and the history of your conversation.
+
+**What you can do in Chat:**
+
+- Request new features ("Add a dark mode toggle to the settings page")
+- Ask questions about your codebase ("How does the auth flow work?")
+- Debug errors by pasting stack traces
+- Request refactors ("Convert these class components to functional")
+- Enter Plan Mode before any significant change
+
+### Code
+
+The Code panel is a full read-only file browser of your project's sandbox. You can navigate the directory tree, view any file, and inspect the exact content the agent is working with.
+
+The **Changes** tab within Code shows every diff produced by the agent as a stacked change, ready for your review.
+
+### Manage
+
+The Manage panel covers operational concerns:
+
+- **Deployments** — live URLs, rollback history, status
+- **Databases** — Neon Postgres branches and connection strings
+- **Environment variables** — secrets and config per environment
+- **Team** — members, roles, and invitations
+- **Domains** — custom domain configuration
+
+## How the sandbox works
+
+Every Strayl project runs in an isolated Daytona workspace — a Linux container with your full repository, runtime, and dev server. The AI agent executes commands directly in this sandbox:
+
+- `npm run dev` for the live preview
+- File edits, terminal commands, test runs
+- Database migrations
+
+You can view the agent's terminal output in the **Logs** section. The sandbox persists between sessions, so your dev server stays running.
+
+## Live preview
+
+While the agent works, you can open the **Preview** to see your app running in real time. The preview URL is a secure HTTPS endpoint that reflects the current sandbox state — no deployment needed for preview.
+
+## Next steps
+
+- [Projects](/docs/platform/projects) — creating and importing projects
+- [AI Agent](/docs/platform/agent) — models, streaming, and context
+- [Deployments](/docs/platform/deployments) — going live

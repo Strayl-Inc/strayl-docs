@@ -1,0 +1,56 @@
+---
+title: Projects
+description: Create new projects or import existing repositories into Strayl.
+---
+
+A **project** in Strayl is a self-contained workspace: a sandboxed codebase, a dev environment, a database, and a set of deployments. Each project maps to a single application.
+
+## Creating a project
+
+From the dashboard, click **New Project**. You'll see two options:
+
+### Start from scratch
+
+Strayl scaffolds a new Next.js application in a fresh sandbox. The scaffold includes:
+
+- TypeScript
+- Tailwind CSS
+- ESLint and Prettier
+- A ready-to-run dev server on port 3000
+
+The project is immediately active — the AI agent starts in the Chat panel and you can begin working right away.
+
+### Import from GitHub
+
+Paste a public or private GitHub repository URL. Strayl will:
+
+1. Clone the repository into the sandbox
+2. Detect the package manager (`npm`, `yarn`, `pnpm`, or `bun`)
+3. Run `install` automatically
+4. Start the dev server if a `dev` script is found
+
+For private repositories, you'll need to authorize Strayl to access your GitHub organization during the import flow.
+
+## Project settings
+
+After creation, configure your project from the **Manage** tab:
+
+| Setting | Description |
+|---------|-------------|
+| **Name** | Display name shown in the dashboard |
+| **Framework** | Detected automatically; affects build commands |
+| **Build command** | Override the default (`next build`, `vite build`, etc.) |
+| **Install command** | Override the default install command |
+| **Output directory** | For static site generators (default: `.next` or `dist`) |
+
+## Deleting a project
+
+Open the project, go to **Manage → Settings**, scroll to the Danger Zone, and click **Delete Project**. This permanently removes the sandbox, all deployments, and the database. This action cannot be undone.
+
+## Multiple projects
+
+Your account can have multiple projects. The dashboard shows all projects with their:
+
+- Last activity time
+- Active deployment URL
+- Quick actions (Open, Deploy, Delete)

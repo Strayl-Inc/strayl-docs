@@ -1,0 +1,10 @@
+{
+  "pages": [
+    "overview",
+    "authentication",
+    "projects",
+    "git-workflow",
+    "changes"
+  ],
+  "title": "CLI"
+}

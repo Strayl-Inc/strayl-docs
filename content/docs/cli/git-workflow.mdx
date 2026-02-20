@@ -1,0 +1,132 @@
+---
+title: Git Workflow
+description: Push, pull, and promote changes between local and Strayl sandbox.
+---
+
+The Strayl CLI uses a Git-like workflow for syncing code between your local machine and the remote sandbox.
+
+## st push
+
+Push local changes to the Strayl sandbox and trigger a deployment.
+
+```bash
+st push
+```
+
+This is the primary command you'll use to deploy changes. It:
+1. Computes a diff between your local files and the sandbox
+2. Uploads the changed files
+3. Triggers a build
+4. Promotes the build to production (if `--deploy` is set)
+
+### Options
+
+| Flag | Description |
+|------|-------------|
+| `--message <msg>` | Change description (shown in Change history) |
+| `--deploy` | Trigger a production deployment after push (default: yes) |
+| `--no-deploy` | Push to sandbox only, don't deploy |
+| `--env <name>` | Target environment (`production`, `preview`) |
+| `--project <id>` | Override the linked project |
+
+### Examples
+
+```bash
+# Push and deploy
+st push --message "Add dark mode toggle"
+
+# Push without deploying (preview/sandbox only)
+st push --no-deploy
+
+# Push to a specific project
+st push --project proj_abc123
+```
+
+## st pull
+
+Pull the current sandbox state to your local directory.
+
+```bash
+st pull
+```
+
+This downloads any files the AI agent has modified in the sandbox that aren't reflected locally. Useful when you've been using the web UI and want to continue locally.
+
+### Options
+
+| Flag | Description |
+|------|-------------|
+| `--force` | Overwrite local changes without prompt |
+| `--dry-run` | Show what would be pulled without downloading |
+
+### Example
+
+```bash
+# See what would be pulled
+st pull --dry-run
+
+# Pull all remote changes
+st pull
+```
+
+## st promote
+
+Promote a specific deployment to production.
+
+```bash
+st promote [deployment-id]
+```
+
+Without an argument, promotes the most recent successful deployment.
+
+### Options
+
+| Flag | Description |
+|------|-------------|
+| `--list` | List available deployments before selecting |
+
+### Example
+
+```bash
+# List and interactively select
+st promote --list
+
+# Promote a specific deployment
+st promote dep_abc123
+```
+
+## Typical workflow
+
+Here's a typical development workflow combining local editing and Strayl:
+
+```bash
+# 1. Start by pulling the latest sandbox state
+st pull
+
+# 2. Make local edits
+code .
+
+# 3. Test locally
+npm run dev
+
+# 4. Push when ready
+st push --message "Fix user signup validation"
+
+# 5. Check deployment
+st status
+```
+
+## Conflict resolution
+
+If both local and remote have changes (`diverged` status):
+
+```bash
+# See what's different
+st status
+
+# Pull remote changes (merges into your local)
+st pull
+
+# Resolve any conflicts manually, then push
+st push
+```

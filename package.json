@@ -1,0 +1,48 @@
+{
+  "dependencies": {
+    "@base-ui/react": "^1.1.0",
+    "@hugeicons/core-free-icons": "^2.0.0",
+    "@hugeicons/react": "^1.1.1",
+    "@shikijs/transformers": "^3.15.0",
+    "@tanstack/react-table": "^8.21.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "fumadocs-core": "^16.0.14",
+    "fumadocs-mdx": "^14.0.3",
+    "jotai": "^2.15.1",
+    "lucide-react": "^0.555.0",
+    "next": "16.0.9",
+    "next-themes": "^0.4.6",
+    "react": "^19.2.3",
+    "react-day-picker": "^9.13.0",
+    "react-dom": "^19.2.3",
+    "tailwind-merge": "^3.4.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
+    "@types/mdx": "^2.0.13",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.6",
+    "@types/react-dom": "^19.2.3",
+    "rehype-pretty-code": "^0.14.1",
+    "shiki": "^3.15.0",
+    "tailwindcss": "^4.1.17",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  },
+  "license": "MIT",
+  "name": "strayl-docs",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "clean": "rm -rf node_modules && rm -rf .next && rm -rf .source",
+    "dev": "next dev --port 4000",
+    "postinstall": "fumadocs-mdx",
+    "start": "next start --port 4000",
+    "typecheck": "tsc --noEmit"
+  },
+  "type": "module",
+  "version": "0.1.0"
+}

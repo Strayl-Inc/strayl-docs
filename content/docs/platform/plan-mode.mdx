@@ -1,0 +1,72 @@
+---
+title: Plan Mode
+description: Review and approve the agent's plan before it writes any code.
+---
+
+**Plan Mode** is a step where the AI agent outlines exactly what it intends to do before touching any files. You review the plan and decide whether to proceed, modify, or cancel.
+
+## Why use Plan Mode?
+
+For significant changes — new features, refactors, architectural decisions — it's valuable to see the agent's intent upfront:
+
+- **Catch misunderstandings early** before code is written
+- **Understand scope** — know which files will be affected
+- **Give feedback** — guide the approach before any work happens
+- **Save time** — one correction at the planning stage beats five corrections during execution
+
+## How it works
+
+When you send a message, the agent can enter Plan Mode automatically (based on the complexity of the request) or you can trigger it explicitly.
+
+### Automatic Plan Mode
+
+The agent enters Plan Mode for requests that involve:
+
+- Creating new pages or components
+- Setting up new API routes
+- Database schema changes
+- Significant refactors
+
+### Explicit Plan Mode
+
+You can always trigger Plan Mode by prefixing your message:
+
+```
+Plan: Refactor the authentication flow to use JWT instead of sessions
+```
+
+Or by using the **Plan** button in the chat toolbar.
+
+## The planning step
+
+In Plan Mode, the agent will output a structured plan like:
+
+```
+I'll refactor auth to use JWT. Here's my plan:
+
+1. Install `jose` for JWT signing/verification
+2. Create `lib/auth/jwt.ts` with sign and verify helpers
+3. Update `app/api/auth/login/route.ts` to issue a JWT on success
+4. Update `middleware.ts` to verify the JWT on protected routes
+5. Remove the `next-auth` session dependency
+6. Update environment variables: add JWT_SECRET
+
+Files affected: 6 modified, 1 created, 1 deleted
+Estimated changes: ~200 lines
+```
+
+## Approving or modifying the plan
+
+After seeing the plan, you have three options:
+
+1. **Approve** — type "Go ahead" or "Looks good, proceed" — the agent starts coding
+2. **Modify** — "Use RS256 instead of HS256 for the JWT" — the agent revises the plan
+3. **Cancel** — "Actually, let's keep sessions for now" — nothing changes
+
+The plan step doesn't write any code. You're safe to iterate on it as many times as needed.
+
+## Tips
+
+- Ask for a plan on any change, even small ones — it's free and fast
+- Plans can reveal unintended side effects ("Wait, you're removing the refresh token?")
+- Approved plans become the agent's working spec — it will stick to them

@@ -1,0 +1,102 @@
+---
+title: CLI Overview
+description: Install and configure the Strayl CLI (st) for terminal-based workflows.
+---
+
+The **Strayl CLI** (`st`) lets you work with Strayl from your terminal. You can push and pull code, manage deployments, inspect changes, and run agent tasks — all without opening the browser.
+
+## Installation
+
+```bash
+npm install -g @strayl/cli
+```
+
+Or with other package managers:
+
+```bash
+pnpm add -g @strayl/cli
+yarn global add @strayl/cli
+bun add -g @strayl/cli
+```
+
+Verify the installation:
+
+```bash
+st --version
+```
+
+## Quick start
+
+```bash
+# Authenticate
+st login
+
+# Link a local directory to a Strayl project
+st link
+
+# Push local changes
+st push
+
+# Pull remote changes
+st pull
+```
+
+## Commands reference
+
+| Command | Description |
+|---------|-------------|
+| `st login` | Authenticate with your Strayl account |
+| `st logout` | Remove stored credentials |
+| `st whoami` | Show currently authenticated user |
+| `st init` | Create a new Strayl project from a local directory |
+| `st link` | Link a local directory to an existing project |
+| `st clone <project>` | Clone a Strayl project to a local directory |
+| `st status` | Show the current sync status |
+| `st push` | Push local changes to the sandbox and deploy |
+| `st pull` | Pull remote changes to the local filesystem |
+| `st promote` | Promote a specific deployment to production |
+| `st changes` | List all changes in the current project |
+| `st change <id>` | Show details of a specific change |
+| `st env list` | List environment variables |
+| `st env set` | Set an environment variable |
+| `st env delete` | Delete an environment variable |
+| `st db psql` | Open an interactive psql session |
+| `st logs` | Stream deployment logs |
+
+## Configuration
+
+The CLI stores configuration in `~/.strayl/config.json`. You can also use environment variables:
+
+| Variable | Description |
+|----------|-------------|
+| `STRAYL_TOKEN` | Override the authentication token |
+| `STRAYL_PROJECT` | Override the linked project ID |
+| `STRAYL_API_URL` | Override the API base URL (for self-hosted) |
+
+## Project-level config
+
+Link a local directory to a project by running `st link` inside it. This creates a `.strayl` file:
+
+```json
+{
+  "project": "proj_abc123",
+  "name": "my-app"
+}
+```
+
+Commit this file to share the project link with your team.
+
+## Shell completion
+
+Enable tab completion for `st` commands:
+
+```bash
+# Bash
+st completion bash >> ~/.bashrc
+
+# Zsh
+st completion zsh >> ~/.zshrc
+
+# Fish
+st completion fish >> ~/.config/fish/completions/st.fish
+```
