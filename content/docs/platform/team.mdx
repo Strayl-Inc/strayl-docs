@@ -11,7 +11,7 @@ Strayl supports team collaboration on projects. Each team member has a role that
 |------|-------------|
 | **Owner** | Full access: invite, remove, delete project, manage billing |
 | **Admin** | Manage members, configure settings, deploy |
-| **Developer** | Chat with AI, accept Changes, deploy |
+| **Developer** | Chat with AI, accept change proposals, deploy |
 | **Viewer** | Read-only access to Code View and deployments |
 
 ## Inviting members
@@ -40,22 +40,16 @@ From **Manage → Team**, you can:
 - **Remove member** — click the `···` menu → Remove
 - **Cancel a pending invite** — click Cancel next to an unaccepted invitation
 
-## Personal access tokens
+## API access tokens
 
-For CLI and API access, each user has personal access tokens:
+For direct API access, you can create personal access tokens:
 
 1. Go to your account settings (top right → Settings)
 2. Click **Access Tokens → New Token**
 3. Give it a name and set an expiry
 4. Copy the token — it won't be shown again
 
-Use the token with the CLI:
-
-```bash
-st login --token <your-token>
-```
-
-Or as an HTTP header:
+Use the token as an HTTP header:
 
 ```
 Authorization: Bearer <your-token>
@@ -68,7 +62,7 @@ Owners and Admins can view the audit log in **Manage → Team → Audit Log**. T
 - Who changed what environment variables
 - Who triggered which deployments
 - Who invited or removed team members
-- Who merged Changes
+- Who accepted or denied change proposals
 
 ## Organization accounts
 

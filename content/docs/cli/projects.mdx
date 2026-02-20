@@ -5,85 +5,95 @@ description: Create, link, clone, and check status of Strayl projects from the C
 
 ## st init
 
-Create a new Strayl project from the current directory.
+Create a new Strayl project from the current git repository.
 
 ```bash
 st init
 ```
 
-This will:
-1. Ask for a project name
-2. Create the project in your Strayl account
-3. Upload the current directory to the sandbox
-4. Create a `.strayl` config file linking this directory to the project
+You must be inside a git repository to run this command. It will:
+1. Create the project in your Strayl account
+2. Add a `strayl` git remote pointing to the new repository
+3. Configure git credentials automatically
+4. Optionally push your current branch to `dev`
 
 ### Options
 
 | Flag | Description |
 |------|-------------|
-| `--name <name>` | Project name (skips interactive prompt) |
-| `--framework <name>` | Framework hint (`next`, `vite`, `remix`, etc.) |
-| `--private` | Create as private project (default: private) |
+| `[name]` | Project name as a positional argument |
+| `--name <name>` | Project name (defaults to current directory name) |
+| `--private` | Create as a private project (default: public) |
+| `--description <desc>` | Project description |
 
 ### Example
 
 ```bash
 cd my-app
-st init --name "My App" --framework next
+st init --name "My App" --private
+```
+
+After creating, you can push your code:
+
+```
+Strayl project created: https://app.strayl.dev/alice/my-app
+
+Push current code to dev? [Y/n]
 ```
 
 ## st link
 
-Link an existing local directory to an existing Strayl project.
+Link an existing local git repository to an existing Strayl project.
 
 ```bash
-st link
+st link username/project
 ```
 
-This creates a `.strayl` file in the current directory. If you already have a `.strayl` file (e.g., committed by a teammate), running `st link` will validate and refresh the link.
+Requires `username/project` format. This adds the `strayl` remote and configures git credentials. The remote `dev` branch must be empty — if the project already has code, use `st clone` instead.
 
 ### Options
 
 | Flag | Description |
 |------|-------------|
-| `--project <id>` | Project ID to link to (skips interactive selection) |
+| `--force-push` | Force-push local code to dev (use only if dev is empty) |
 
 ### Example
 
 ```bash
 cd my-app
-st link --project proj_abc123
+st link alice/my-app
 ```
+
+After linking, you'll be prompted to push your local code to `dev`.
 
 ## st clone
 
-Clone a Strayl project to a local directory.
+Clone a Strayl repository to a local directory.
 
 ```bash
-st clone <project-name-or-id>
+st clone username/repo
 ```
 
-This creates a new directory with the project name, downloads the current sandbox state, and creates a `.strayl` link file.
+This is a wrapper around `git clone` that accepts the `username/repo` shorthand instead of a full URL. The `strayl` git credentials are used automatically.
 
 ### Example
 
 ```bash
-st clone my-app
+st clone alice/my-app
 cd my-app
 npm install
 npm run dev
 ```
 
-### Options
+You can also pass a full URL:
 
-| Flag | Description |
-|------|-------------|
-| `--dir <path>` | Target directory (default: project name) |
-| `--branch <branch>` | Clone a specific git branch |
+```bash
+st clone https://api.strayl.dev/alice/my-app.git
+```
 
 ## st status
 
-Show the sync status between your local directory and the Strayl sandbox.
+Show the current project and pending change proposals.
 
 ```bash
 st status
@@ -92,16 +102,13 @@ st status
 **Output:**
 
 ```
-Project: my-app (proj_abc123)
-Sandbox: synced
-Local changes: 3 files modified
-Last push: 2 minutes ago
-Active deployment: https://my-app.strayl.app (deployed 1 hour ago)
+Project: alice/my-app → https://app.strayl.dev/alice/my-app
+Branch:  add-dark-mode
+Visibility: public
+
+Pending changes (2):
+  chg_abc123      Add dark mode toggle                      proposed
+  chg_def456      Fix signup validation          ⚠          needs_restack
 ```
 
-### What "synced" means
-
-- `synced` — local and sandbox are identical
-- `ahead` — local has changes not in the sandbox (run `st push`)
-- `behind` — sandbox has changes not locally (run `st pull`)
-- `diverged` — both have changes; you'll need to merge
+The `⚠` indicator means the change has a conflict with `dev` and needs to be restacked before it can be merged.

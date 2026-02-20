@@ -3,12 +3,12 @@ title: Quickstart
 description: Deploy your first app with Strayl in under 5 minutes.
 ---
 
-This guide takes you from zero to a live web app. No local setup required.
+This guide takes you from zero to a live web app.
 
 ## Prerequisites
 
-- A GitHub account (for project import and authentication)
-- That's it
+- A GitHub account (for authentication)
+- That's it — no local setup needed for the web workflow
 
 ## Steps
 
@@ -22,34 +22,35 @@ Go to [app.strayl.dev](https://app.strayl.dev) and sign in with GitHub. Strayl u
 
 From the dashboard, click **New Project**. You have two options:
 
-- **Start from scratch** — Strayl creates an empty Next.js project in a fresh sandbox
-- **Import from GitHub** — paste a repo URL and Strayl clones it
+- **New project** — create a blank project and let the AI scaffold it from scratch
+- **Import from GitHub** — connect an existing repository
 
 ### Chat with the AI
 
-Once your project loads, you'll see the **Chat** panel. Type your first request:
+Once your project loads, you'll see the **Chat** tab. Type your first request:
 
 ```
 Create a landing page with a hero section and a signup form
 ```
 
 The agent will:
-1. Enter **Plan Mode** — showing you what it intends to do before writing code
-2. Write the code in the sandbox
-3. Show you a **Change** with the diff to review
+1. Enter **Plan Mode** — showing you what it intends to do before writing any code
+2. Write the code on a feature branch
+3. Create a **change proposal** with the diff to review
 
-### Review and merge
+### Review and accept
 
-Click the **Changes** tab to see the diff. Accept the whole change or cherry-pick individual files. When ready, click **Merge**.
+Go to **Manage → Updates** to see the diff. Review the file changes, then click **Accept** to merge the branch into `dev`.
 
-### See it live
+### Deploy to production
 
-Your app deploys automatically after merging. Click the deployment URL in the header to see it live.
+Once you're happy with `dev`, click **Promote** (or run `st promote` from the CLI) to merge `dev` into `main` and deploy your app to a live URL.
 
 </Steps>
 
 ## What's next?
 
 - [Platform overview](/docs/platform/overview) — explore all features
+- [Updates](/docs/platform/changes) — understanding change proposals
 - [Deployments](/docs/platform/deployments) — custom domains, rollbacks, and more
 - [CLI](/docs/cli/overview) — work from your terminal with `st`

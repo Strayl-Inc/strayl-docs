@@ -1,132 +1,121 @@
 ---
 title: Git Workflow
-description: Push, pull, and promote changes between local and Strayl sandbox.
+description: Push feature branches, create change proposals, and promote to production.
 ---
 
-The Strayl CLI uses a Git-like workflow for syncing code between your local machine and the remote sandbox.
+The Strayl CLI works on top of git. After running `st init` or `st link`, a git remote called `strayl` is added to your repository. All syncing happens through standard git operations with this remote.
+
+## Branches
+
+Strayl uses two special branches:
+
+| Branch | Purpose |
+|--------|---------|
+| `dev` | The working branch — updated by the AI agent and by merged changes |
+| `main` | The production branch — updated only via `st promote` |
+
+You work on **feature branches** (any branch other than `dev` or `main`) and use `st push` to propose changes.
 
 ## st push
 
-Push local changes to the Strayl sandbox and trigger a deployment.
+Push a feature branch to Strayl and create a **change proposal**.
 
 ```bash
 st push
 ```
 
-This is the primary command you'll use to deploy changes. It:
-1. Computes a diff between your local files and the sandbox
-2. Uploads the changed files
-3. Triggers a build
-4. Promotes the build to production (if `--deploy` is set)
+This is the primary command for proposing changes. It:
+1. Pushes the current branch (or a specified branch) to the `strayl` remote
+2. Creates a change proposal that appears in **Manage → Updates** in the web UI
+
+<Callout type="warn">
+You cannot run `st push` on `main` or `dev`. Switch to a feature branch first.
+</Callout>
 
 ### Options
 
 | Flag | Description |
 |------|-------------|
-| `--message <msg>` | Change description (shown in Change history) |
-| `--deploy` | Trigger a production deployment after push (default: yes) |
-| `--no-deploy` | Push to sandbox only, don't deploy |
-| `--env <name>` | Target environment (`production`, `preview`) |
-| `--project <id>` | Override the linked project |
+| `--title <title>` | Change proposal title (defaults to last commit message) |
+| `--description <desc>` | Longer description for the change |
+| `--no-change` | Just push the branch without creating a change proposal |
 
 ### Examples
 
 ```bash
-# Push and deploy
-st push --message "Add dark mode toggle"
+# Push current branch with auto-generated title
+st push
 
-# Push without deploying (preview/sandbox only)
-st push --no-deploy
+# Push with a custom title
+st push --title "Add dark mode toggle"
 
-# Push to a specific project
-st push --project proj_abc123
+# Push without creating a proposal (bare branch push)
+st push --no-change
 ```
 
 ## st pull
 
-Pull the current sandbox state to your local directory.
+Pull the latest `dev` or `main` branch from Strayl into your local repository.
 
 ```bash
+# Pull from dev (default)
 st pull
+
+# Pull from main
+st pull main
 ```
 
-This downloads any files the AI agent has modified in the sandbox that aren't reflected locally. Useful when you've been using the web UI and want to continue locally.
-
-### Options
-
-| Flag | Description |
-|------|-------------|
-| `--force` | Overwrite local changes without prompt |
-| `--dry-run` | Show what would be pulled without downloading |
-
-### Example
-
-```bash
-# See what would be pulled
-st pull --dry-run
-
-# Pull all remote changes
-st pull
-```
+This runs `git fetch strayl` followed by `git merge strayl/[branch]`. Useful when the AI agent has made changes in the web UI and you want to continue locally.
 
 ## st promote
 
-Promote a specific deployment to production.
+Promote the `dev` branch to `main`, triggering a production deployment.
 
 ```bash
-st promote [deployment-id]
+st promote
 ```
 
-Without an argument, promotes the most recent successful deployment.
-
-### Options
-
-| Flag | Description |
-|------|-------------|
-| `--list` | List available deployments before selecting |
-
-### Example
-
-```bash
-# List and interactively select
-st promote --list
-
-# Promote a specific deployment
-st promote dep_abc123
-```
+This merges `dev` into `main` on the Strayl server. The production deployment is updated automatically.
 
 ## Typical workflow
 
-Here's a typical development workflow combining local editing and Strayl:
-
 ```bash
-# 1. Start by pulling the latest sandbox state
+# 1. Pull the latest dev state
 st pull
 
-# 2. Make local edits
-code .
+# 2. Create a feature branch
+git checkout -b add-dark-mode
 
-# 3. Test locally
-npm run dev
+# 3. Make commits
+git add .
+git commit -m "Add dark mode toggle"
 
-# 4. Push when ready
-st push --message "Fix user signup validation"
+# 4. Push the branch and create a change proposal
+st push --title "Add dark mode toggle"
 
-# 5. Check deployment
-st status
+# 5. Review the change in the browser, then approve it (merges into dev)
+
+# 6. When ready to deploy to production
+st promote
 ```
 
 ## Conflict resolution
 
-If both local and remote have changes (`diverged` status):
+If your change has conflicts with `dev` (shown as `needs_restack` status), you can restack it from the CLI:
 
 ```bash
-# See what's different
-st status
+st change <change-id> restack
+```
 
-# Pull remote changes (merges into your local)
+Or resolve it manually:
+
+```bash
+# Pull the latest dev
 st pull
 
-# Resolve any conflicts manually, then push
+# Rebase your branch on dev
+git rebase strayl/dev
+
+# Re-push
 st push
 ```

@@ -3,24 +3,29 @@ title: Deployments
 description: Deploy your app to production, configure custom domains, and roll back instantly.
 ---
 
-Every time you merge Changes, Strayl creates a **Deployment** — a production-ready build of your app with a permanent URL.
+A **deployment** is a production build of your app triggered when you promote `dev` to `main`. Each deployment gets a permanent URL and build logs.
+
+You can find your deployments in **Manage → Releases**.
 
 ## Triggering a deployment
 
-Deployments are triggered by:
+Deployments are triggered by promoting `dev` to `main`:
 
-1. **Merging Changes** from the UI — click **Deploy** in the Changes panel
-2. **Pushing from the CLI** — `st push` merges and deploys in one command
-3. **Auto-deploy** — enable auto-deploy to trigger on every accepted Change
+- **From the UI** — use the Promote action in the project
+- **From the CLI** — run `st promote`
+
+```bash
+st promote
+```
 
 ## Deployment URLs
 
 Each deployment gets:
 
-- A **permanent URL** — `https://[project-id]-[deployment-id].strayl.app`
-- An **alias** — the live URL for the current production deployment: `https://[project-name].strayl.app`
+- A **permanent URL** tied to that specific build
+- An **alias** — the live URL for the current production deployment
 
-When you deploy, the alias is updated to point to the new deployment. Previous deployments remain accessible at their permanent URLs.
+When you promote, the alias is updated to point to the new deployment. Previous deployments remain accessible at their permanent URLs.
 
 ## Custom domains
 
@@ -50,34 +55,16 @@ Once DNS propagates (typically 1–5 minutes), your domain is live with automati
 
 Every deployment is preserved. To roll back:
 
-1. Go to **Manage → Deployments**
+1. Go to **Manage → Releases**
 2. Find the deployment you want to restore
 3. Click **Promote to Production**
 
-The alias immediately points to the selected deployment. Your code doesn't change — the rollback is instant (just a pointer update).
-
-## Build configuration
-
-Strayl auto-detects your framework and runs the appropriate build command:
-
-| Framework | Build command | Output |
-|-----------|--------------|--------|
-| Next.js | `next build` | `.next/` |
-| Vite | `vite build` | `dist/` |
-| Create React App | `react-scripts build` | `build/` |
-| Remix | `remix build` | `build/` |
-
-Override these in **Manage → Settings → Build**.
+The alias immediately points to the selected deployment — the rollback is instant.
 
 ## Build logs
 
-View build logs in real time in **Manage → Deployments → [deployment] → Logs**. If a build fails, the previous deployment remains active and you'll see the error in the logs.
+View build logs in **Manage → Releases → [deployment] → Logs**. If a build fails, the previous deployment remains active and the error is shown in the logs.
 
-## Environment-specific deployments
+## Environment-specific variables
 
-Strayl supports two environments:
-
-- **Production** — the live deployment served at your domain
-- **Preview** — the sandbox dev server, accessible at a preview URL
-
-Environment variables can be scoped per environment. See [Environment Variables](/docs/platform/environment-vars).
+Environment variables can be scoped to production or development environments. See [Environment Variables](/docs/platform/environment-vars).

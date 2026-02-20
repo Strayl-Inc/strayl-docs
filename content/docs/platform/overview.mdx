@@ -3,13 +3,13 @@ title: Platform Overview
 description: The Strayl platform — Chat, Code, and Manage in one unified workspace.
 ---
 
-The Strayl platform is organized around three panels: **Chat**, **Code**, and **Manage**. Together they give you a complete development environment that runs entirely in the browser, backed by an AI agent and an isolated cloud sandbox.
+The Strayl platform is organized around three tabs in the sidebar: **Chat**, **Code**, and **Manage**. Together they give you a complete development environment that runs in the browser, backed by an AI agent and a Git repository.
 
-## The three panels
+## The three tabs
 
 ### Chat
 
-The Chat panel is where you interact with the AI agent. Write plain English descriptions of what you want to build, and the agent translates them into code changes. The agent maintains context across your entire session — it knows your tech stack, the files you've touched, and the history of your conversation.
+The Chat tab shows your conversation sessions with the AI agent. Each session corresponds to a git feature branch. You can have multiple sessions (branches) per project and switch between them.
 
 **What you can do in Chat:**
 
@@ -17,40 +17,45 @@ The Chat panel is where you interact with the AI agent. Write plain English desc
 - Ask questions about your codebase ("How does the auth flow work?")
 - Debug errors by pasting stack traces
 - Request refactors ("Convert these class components to functional")
-- Enter Plan Mode before any significant change
+- Use Plan Mode before significant changes
 
 ### Code
 
-The Code panel is a full read-only file browser of your project's sandbox. You can navigate the directory tree, view any file, and inspect the exact content the agent is working with.
+The Code tab is a file browser for your project's git repository. A **branch switcher** at the top lets you toggle between the **production** branch (`main`) and the **dev** branch — so you can inspect exactly what's live vs what's in progress.
 
-The **Changes** tab within Code shows every diff produced by the agent as a stacked change, ready for your review.
+Click any file to open it in the viewer with syntax highlighting. When a chat session is active, the Code tab shows the files for that session's branch.
 
 ### Manage
 
-The Manage panel covers operational concerns:
+The Manage tab covers operational concerns. Pages available:
 
-- **Deployments** — live URLs, rollback history, status
-- **Databases** — Neon Postgres branches and connection strings
-- **Environment variables** — secrets and config per environment
-- **Team** — members, roles, and invitations
-- **Domains** — custom domain configuration
+| Page | Description |
+|------|-------------|
+| **Releases** | Deployment history, live URLs, build logs |
+| **Updates** | Change proposals — review, approve, or deny diffs from feature branches |
+| **Analytics** | Traffic and usage metrics |
+| **Domains** | Custom domain configuration |
+| **Environment** | Environment variables and secrets |
+| **Databases** | Neon Postgres connection strings and branches |
+| **Logs** | Runtime and build logs |
+| **Settings** | Project name, visibility, and other settings |
 
-## How the sandbox works
+## How the repository works
 
-Every Strayl project runs in an isolated Daytona workspace — a Linux container with your full repository, runtime, and dev server. The AI agent executes commands directly in this sandbox:
+Every Strayl project has a git repository hosted at `api.strayl.dev`. It has two core branches:
 
-- `npm run dev` for the live preview
-- File edits, terminal commands, test runs
-- Database migrations
+- **`dev`** — the working branch, updated when the AI agent makes changes or when a change proposal is approved
+- **`main`** — the production branch, updated only when you explicitly promote (`st promote` or via the UI)
 
-You can view the agent's terminal output in the **Logs** section. The sandbox persists between sessions, so your dev server stays running.
+Feature branches created by the AI agent or via the CLI are proposed as **change proposals** and reviewed in **Manage → Updates** before being merged into `dev`.
 
 ## Live preview
 
-While the agent works, you can open the **Preview** to see your app running in real time. The preview URL is a secure HTTPS endpoint that reflects the current sandbox state — no deployment needed for preview.
+While a chat session is active, you can open the **Preview** panel to see your app running. The preview reflects the current state of the agent's working environment for that session — no deployment needed to preview changes.
 
 ## Next steps
 
 - [Projects](/docs/platform/projects) — creating and importing projects
-- [AI Agent](/docs/platform/agent) — models, streaming, and context
+- [AI Agent](/docs/platform/agent) — models, streaming reasoning, and context
+- [Updates](/docs/platform/changes) — reviewing and merging change proposals
 - [Deployments](/docs/platform/deployments) — going live

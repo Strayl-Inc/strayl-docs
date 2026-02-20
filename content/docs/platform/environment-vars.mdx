@@ -13,7 +13,7 @@ Go to **Manage → Environment Variables** and click **Add Variable**:
 2. Enter the **Value** — e.g., `sk_live_...`
 3. Choose the **Environment**:
    - **Production** — available in deployed builds
-   - **Preview** — available in the sandbox dev server
+   - **Preview** — available in the dev environment
    - **Both** — available in both
 
 ## Variable scoping
@@ -21,7 +21,7 @@ Go to **Manage → Environment Variables** and click **Add Variable**:
 | Scope | Available in |
 |-------|-------------|
 | Production | Live deployments only |
-| Preview | Sandbox dev server only |
+| Preview | Dev environment only |
 | Both | All environments |
 
 ## Pre-set variables
@@ -57,22 +57,6 @@ Import variables from a `.env` file by clicking **Import .env**:
 STRIPE_SECRET_KEY=sk_live_...
 RESEND_API_KEY=re_...
 OPENAI_API_KEY=sk-...
-```
-
-## CLI
-
-```bash
-# List all variables
-st env list
-
-# Set a variable
-st env set STRIPE_SECRET_KEY=sk_live_...
-
-# Set for production only
-st env set STRIPE_SECRET_KEY=sk_live_... --env production
-
-# Delete a variable
-st env delete STRIPE_SECRET_KEY
 ```
 
 ## Security

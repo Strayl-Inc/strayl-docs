@@ -1,13 +1,13 @@
 ---
 title: Changes
-description: List and inspect AI-generated changes from the CLI.
+description: List and inspect change proposals from the CLI.
 ---
 
-The Strayl CLI lets you view and manage Changes (AI-generated diffs) without opening the browser.
+Change proposals are created when you run `st push`. They represent a feature branch that is proposed to be merged into `dev`. You can list, inspect, and act on them from the CLI.
 
 ## st changes
 
-List all Changes in the current project.
+List all change proposals for the current project.
 
 ```bash
 st changes
@@ -16,97 +16,83 @@ st changes
 **Output:**
 
 ```
-ID         Status    Description                              Files  Date
-─────────────────────────────────────────────────────────────────────────
-chg_abc3   accepted  Add dark mode toggle to settings page   2      2m ago
-chg_abc2   accepted  Create settings page with profile form  4      1h ago
-chg_abc1   accepted  Set up Tailwind CSS configuration       3      3h ago
+ID            TITLE                           STATUS            +/-           AUTHOR        AGE
+────────────────────────────────────────────────────────────────────────────────────────────
+chg_abc123    Add dark mode toggle            proposed          +45/-3        alice         2m
+chg_def456    Fix signup validation           needs_restack     +12/-1        bob           1h
+chg_ghi789    Set up Tailwind CSS             merged            +80/-0        alice         3h
 ```
+
+### Statuses
+
+| Status | Meaning |
+|--------|---------|
+| `proposed` | Open and waiting for review |
+| `merged` | Approved and merged into `dev` |
+| `denied` | Rejected — branch changes were not merged |
+| `needs_restack` | Has conflicts with `dev` and must be restacked before merging |
 
 ### Options
 
 | Flag | Description |
 |------|-------------|
-| `--status <status>` | Filter by status: `pending`, `accepted`, `rejected` |
-| `--limit <n>` | Show only the last N changes (default: 20) |
-| `--json` | Output as JSON |
+| `--status <status>` | Filter by status: `proposed`, `merged`, `denied`, `needs_restack` |
+| `--mine` | Show only changes proposed by the currently logged-in user |
 
 ### Examples
 
 ```bash
-# Show only pending changes
-st changes --status pending
+# Show only open changes
+st changes --status proposed
 
-# Get changes as JSON (useful for scripting)
-st changes --json
+# Show only your changes
+st changes --mine
 ```
 
-## st change \<id\>
+## st change \<id\> [action]
 
-Show details of a specific change including the full diff.
+View details of a specific change, or perform an action on it.
 
 ```bash
-st change chg_abc3
+# View details
+st change chg_abc123
+
+# Approve (merge into dev)
+st change chg_abc123 approve
+
+# Deny (reject without merging)
+st change chg_abc123 deny
+
+# Restack (rebase onto current dev to resolve conflicts)
+st change chg_abc123 restack
+```
+
+### Viewing a change
+
+```bash
+st change chg_abc123
 ```
 
 **Output:**
 
 ```
-Change: chg_abc3
-Status: accepted
-Description: Add dark mode toggle to settings page
-Author: AI Agent
-Date: 2024-01-15 14:32:00
+Add dark mode toggle
+Status:  proposed
+Branch:  add-dark-mode
+Author:  alice
+Age:     2m
 
-Files changed (2):
-  M  app/settings/page.tsx
-  M  components/theme-toggle.tsx
+Files changed:
+  ~ app/settings/page.tsx
+  ~ components/theme-toggle.tsx
 
-─── app/settings/page.tsx ──────────────────────────────────────
-@@ -12,6 +12,9 @@
-   return (
-     <div className="settings-page">
-+      <div className="flex items-center gap-2">
-+        <ThemeToggle />
-+      </div>
-       <UserProfile />
-     </div>
-   );
+https://app.strayl.dev/alice/my-app?change=chg_abc123
 ```
 
-### Options
+### Actions
 
-| Flag | Description |
-|------|-------------|
-| `--diff` | Show the full diff (default: show summary) |
-| `--file <path>` | Show diff for a specific file only |
-| `--json` | Output as JSON |
-
-## Accepting and rejecting from the CLI
-
-```bash
-# Accept a change
-st change chg_abc3 --accept
-
-# Reject a change
-st change chg_abc3 --reject
-
-# Accept a specific file within a change
-st change chg_abc3 --accept --file app/settings/page.tsx
-```
-
-## Scripting with Changes
-
-Use `--json` to integrate with scripts:
-
-```bash
-# Get all pending changes as JSON
-PENDING=$(st changes --status pending --json)
-
-# Count pending changes
-echo $PENDING | jq 'length'
-
-# Get the latest change ID
-LATEST=$(st changes --limit 1 --json | jq -r '.[0].id')
-st change $LATEST --diff
-```
+| Action | Description |
+|--------|-------------|
+| `approve` | Merge the change into `dev` |
+| `deny` | Reject the change (branch is not merged) |
+| `restack` | Rebase the branch onto current `dev` to resolve `needs_restack` conflicts |

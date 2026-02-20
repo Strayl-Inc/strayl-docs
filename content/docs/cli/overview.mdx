@@ -3,7 +3,7 @@ title: CLI Overview
 description: Install and configure the Strayl CLI (st) for terminal-based workflows.
 ---
 
-The **Strayl CLI** (`st`) lets you work with Strayl from your terminal. You can push and pull code, manage deployments, inspect changes, and run agent tasks — all without opening the browser.
+The **Strayl CLI** (`st`) lets you work with Strayl from your terminal. It is a **Git-based tool** — under the hood it works with a `strayl` git remote added to your local repository. You can push feature branches, create change proposals, manage deployments, and inspect project status without opening the browser.
 
 ## Installation
 
@@ -31,13 +31,16 @@ st --version
 # Authenticate
 st login
 
-# Link a local directory to a Strayl project
-st link
+# Create a new Strayl project from an existing git repository
+st init
 
-# Push local changes
+# Or link an existing local repository to a Strayl project
+st link username/my-project
+
+# Push a feature branch and create a change proposal
 st push
 
-# Pull remote changes
+# Pull the latest dev or main branch from Strayl
 st pull
 ```
 
@@ -45,46 +48,59 @@ st pull
 
 | Command | Description |
 |---------|-------------|
-| `st login` | Authenticate with your Strayl account |
+| `st login` | Authenticate with your Strayl account (browser OAuth) |
 | `st logout` | Remove stored credentials |
 | `st whoami` | Show currently authenticated user |
-| `st init` | Create a new Strayl project from a local directory |
-| `st link` | Link a local directory to an existing project |
-| `st clone <project>` | Clone a Strayl project to a local directory |
-| `st status` | Show the current sync status |
-| `st push` | Push local changes to the sandbox and deploy |
-| `st pull` | Pull remote changes to the local filesystem |
-| `st promote` | Promote a specific deployment to production |
-| `st changes` | List all changes in the current project |
-| `st change <id>` | Show details of a specific change |
-| `st env list` | List environment variables |
-| `st env set` | Set an environment variable |
-| `st env delete` | Delete an environment variable |
-| `st db psql` | Open an interactive psql session |
-| `st logs` | Stream deployment logs |
+| `st config` | Show or update CLI configuration |
+| `st init [name]` | Create a new Strayl project from this git repository |
+| `st link <username/project>` | Link this repository to an existing Strayl project |
+| `st clone <username/repo>` | Clone a Strayl repository |
+| `st status` | Show project info and pending change proposals |
+| `st push [branch]` | Push a feature branch and create a change proposal |
+| `st pull [dev\|main]` | Pull the latest dev or main branch from Strayl |
+| `st promote` | Promote dev branch to main (deploy to production) |
+| `st changes` | List change proposals for this project |
+| `st change <id> [action]` | View or act on a change (actions: `approve`, `deny`, `restack`) |
+| `st setup-git` | Re-configure git credentials (usually not needed) |
+
+## How the git integration works
+
+After running `st init` or `st link`, the CLI adds a git remote called `strayl` to your repository:
+
+```bash
+# This is what happens under the hood
+git remote add strayl https://api.strayl.dev/username/project.git
+```
+
+From that point on, the standard Strayl workflow is:
+
+```bash
+# 1. Work on a feature branch (not main or dev)
+git checkout -b my-feature
+
+# 2. Make commits as usual
+git commit -m "Add new feature"
+
+# 3. Push the branch and create a change proposal
+st push
+
+# 4. Review and approve the change at app.strayl.dev
+# 5. When ready to deploy, promote dev → main
+st promote
+```
 
 ## Configuration
 
-The CLI stores configuration in `~/.strayl/config.json`. You can also use environment variables:
+The CLI stores configuration in `~/.strayl/config.json` and credentials in `~/.strayl/credentials`.
 
-| Variable | Description |
-|----------|-------------|
-| `STRAYL_TOKEN` | Override the authentication token |
-| `STRAYL_PROJECT` | Override the linked project ID |
-| `STRAYL_API_URL` | Override the API base URL (for self-hosted) |
+```bash
+# Show current configuration
+st config --show
 
-## Project-level config
-
-Link a local directory to a project by running `st link` inside it. This creates a `.strayl` file:
-
-```json
-{
-  "project": "proj_abc123",
-  "name": "my-app"
-}
+# Override API or app URL (for self-hosted instances)
+st config --api-url https://api.example.com
+st config --app-url https://app.example.com
 ```
-
-Commit this file to share the project link with your team.
 
 ## Shell completion
 
