@@ -1,69 +1,54 @@
 ---
 title: Team & Roles
-description: Invite team members and manage access to your Strayl projects.
+description: Invite collaborators and manage access to your Strayl projects.
 ---
 
-Strayl supports team collaboration on projects. Each team member has a role that determines what they can do.
+Strayl supports team collaboration on projects. Each member has a role that determines what they can do.
 
 ## Roles
 
+There are three roles:
+
 | Role | Permissions |
 |------|-------------|
-| **Owner** | Full access: invite, remove, delete project, manage billing |
-| **Admin** | Manage members, configure settings, deploy |
-| **Developer** | Chat with AI, accept change proposals, deploy |
-| **Viewer** | Read-only access to Code View and deployments |
+| **Owner** | Full access: add/remove collaborators, change roles, manage all project settings |
+| **Administrator** | Accept/deny change proposals, manage settings, deploy |
+| **Developer** | Chat with the AI agent, view code and deployments |
 
-## Inviting members
+Only the project **owner** can invite collaborators and manage the team.
+
+## Inviting collaborators
+
+The **Add collaborators** button is in the project header (top right area of the project page). Only the owner sees it.
 
 <Steps>
 
-### Open Team settings
+### Open the invite dialog
 
-Go to **Manage → Team**.
+Click **Add collaborators** in the project header.
 
-### Send an invitation
+### Search for a user
 
-Enter the email address and select a role. Click **Send Invite**.
+Type a Strayl username or name in the search field. Results appear as you type.
 
-### Member accepts
+### Select and assign a role
 
-The invited person receives an email. They click the link, create an account (or log in), and gain access to the project.
+Click a user to add them to the invite list. Each selected user gets the **Developer** role by default — click the role label next to their name to change it to **Administrator**.
+
+### Send the invite
+
+Click **Add collaborator** (or **Add N collaborators** if you selected multiple). The user receives a notification and can accept or decline the invite.
 
 </Steps>
 
-## Managing access
+## Accepting an invite
 
-From **Manage → Team**, you can:
+When you're invited to a project, a pending invite appears in your account. You can accept or decline it from the notification or from your dashboard.
 
-- **Change role** — click the role badge next to a member's name
-- **Remove member** — click the `···` menu → Remove
-- **Cancel a pending invite** — click Cancel next to an unaccepted invitation
+## Managing the team
 
-## API access tokens
+The project owner can:
 
-For direct API access, you can create personal access tokens:
-
-1. Go to your account settings (top right → Settings)
-2. Click **Access Tokens → New Token**
-3. Give it a name and set an expiry
-4. Copy the token — it won't be shown again
-
-Use the token as an HTTP header:
-
-```
-Authorization: Bearer <your-token>
-```
-
-## Audit log
-
-Owners and Admins can view the audit log in **Manage → Team → Audit Log**. The log records:
-
-- Who changed what environment variables
-- Who triggered which deployments
-- Who invited or removed team members
-- Who accepted or denied change proposals
-
-## Organization accounts
-
-For larger teams, Strayl supports Organization accounts that group multiple projects under a single billing entity with shared member management.
+- **Change a member's role** — click the role badge next to their name in the team popover
+- **Remove a member** — use the member menu in the team popover
+- **Cancel a pending invite** — open the invite dialog and cancel any unaccepted invite
