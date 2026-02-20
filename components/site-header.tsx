@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { ModeSwitcher } from "@/components/shared/mode-switcher";
@@ -11,21 +12,35 @@ export function SiteHeader() {
   const pageTree = source.pageTree;
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-sidebar/80 backdrop-blur-sm before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-border/64">
+    <header className="sticky top-0 z-40 w-full bg-sidebar">
       <div className="container relative flex h-(--header-height) w-full items-center justify-between gap-2 px-4 sm:px-6">
         <MobileNav
           className="flex lg:hidden"
           items={appConfig.navItems}
           tree={pageTree}
         />
-        <div className="-mt-0.5 flex shrink-0 items-center gap-1.5 font-heading text-2xl sm:text-[1.625rem]">
-          <Link aria-label="Home" href="/">
-            strayl
-          </Link>
-          <span className="font-sans text-base font-normal text-muted-foreground">
+        <Link aria-label="Home" className="-mt-0.5 flex shrink-0 items-center gap-2" href="/">
+          <Image
+            alt="Strayl"
+            className="size-7 rounded-md dark:hidden"
+            height={28}
+            src="/logo-dark.webp"
+            width={28}
+          />
+          <Image
+            alt="Strayl"
+            className="hidden size-7 rounded-md dark:block"
+            height={28}
+            src="/logo-light.webp"
+            width={28}
+          />
+          <span className="font-[family-name:var(--font-bitcount)] text-xl tracking-[0.03em]">
+            STRAYL
+          </span>
+          <span className="font-sans text-sm font-normal text-muted-foreground">
             docs
           </span>
-        </div>
+        </Link>
         <div className="ms-auto flex items-center gap-2 md:flex-1 md:justify-end">
           <MainNav className="hidden lg:flex" items={appConfig.navItems} />
           <div className="mx-2 hidden w-full flex-1 md:flex md:w-auto md:flex-none">
@@ -34,7 +49,7 @@ export function SiteHeader() {
           <a
             aria-label="GitHub"
             className="flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground"
-            href="https://github.com/strayldev/strayl"
+            href="https://github.com/Strayl-Inc"
             rel="noreferrer"
             target="_blank"
           >
