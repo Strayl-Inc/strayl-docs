@@ -1,4 +1,4 @@
 {
-  "pages": ["(root)", "platform", "cli"],
+  "pages": ["(root)", "platform", "cli", "mcp"],
   "root": true
 }

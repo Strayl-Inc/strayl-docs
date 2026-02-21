@@ -1,0 +1,167 @@
+---
+title: MCP Tools Reference
+description: Complete reference for all tools available in the Strayl MCP Server.
+---
+
+The Strayl MCP server exposes **13 tools** across three categories: databases, database migrations, and environment variables.
+
+## Databases
+
+### `list_projects`
+
+List all Strayl projects you are a member of.
+
+**Inputs:** none
+
+---
+
+### `list_databases`
+
+List all databases for a project.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `owner` | string | Project owner username |
+| `slug` | string | Project slug |
+
+---
+
+### `create_database`
+
+Create a new database for a project.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `owner` | string | yes | Project owner username |
+| `slug` | string | yes | Project slug |
+| `name` | string | yes | Database name |
+| `environment` | `development` \| `production` | no | Target environment (defaults to development) |
+| `region` | string | no | Region identifier — see `list_regions` |
+
+---
+
+### `delete_database`
+
+Delete a database from a project.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `owner` | string | Project owner username |
+| `slug` | string | Project slug |
+| `databaseId` | string | Database ID to delete |
+
+---
+
+### `run_database_query`
+
+Execute a SQL query against a project database.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `owner` | string | Project owner username |
+| `slug` | string | Project slug |
+| `databaseId` | string | Database ID |
+| `sql` | string | SQL query to execute |
+
+---
+
+### `get_database_connection`
+
+Get the connection string for a project database.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `owner` | string | Project owner username |
+| `slug` | string | Project slug |
+| `databaseId` | string | Database ID |
+
+---
+
+### `list_regions`
+
+List available database regions. No inputs required.
+
+---
+
+## Database Migrations
+
+The migration tools use a two-step prepare/apply pattern. This gives the agent (and you) a chance to review the migration SQL and the current schema before any changes are made.
+
+### `prepare_database_migration`
+
+Prepare a SQL migration. Fetches the current schema so the agent can verify the migration before applying it. Returns a `migrationId` to pass to `complete_database_migration`.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `owner` | string | yes | Project owner username |
+| `slug` | string | yes | Project slug |
+| `migrationSql` | string | yes | SQL migration statements to apply |
+| `databaseId` | string | no | Database ID — auto-detects the development database if omitted |
+
+**Returns:** `migrationId`, the migration SQL, the detected `databaseId`, and the current schema.
+
+---
+
+### `complete_database_migration`
+
+Apply a previously prepared SQL migration to the database.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `owner` | string | Project owner username |
+| `slug` | string | Project slug |
+| `databaseId` | string | Database ID returned by `prepare_database_migration` |
+| `migrationSql` | string | The SQL migration to apply |
+| `migrationId` | string | Migration ID from `prepare_database_migration` |
+
+---
+
+### `promote_schema`
+
+Promote the database schema from development to production.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `owner` | string | Project owner username |
+| `slug` | string | Project slug |
+
+---
+
+## Environment Variables
+
+### `list_env_vars`
+
+List environment variables for a project.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `owner` | string | yes | Project owner username |
+| `slug` | string | yes | Project slug |
+| `environment` | `dev` \| `prod` | no | Environment (defaults to `dev`) |
+
+---
+
+### `update_env_var`
+
+Create or update an environment variable for a project.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `owner` | string | yes | Project owner username |
+| `slug` | string | yes | Project slug |
+| `key` | string | yes | Variable name |
+| `value` | string | yes | Variable value |
+| `environment` | `dev` \| `prod` | no | Environment (defaults to `dev`) |
+
+---
+
+### `delete_env_var`
+
+Delete an environment variable from a project.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `owner` | string | yes | Project owner username |
+| `slug` | string | yes | Project slug |
+| `key` | string | yes | Variable name to delete |
+| `environment` | `dev` \| `prod` | no | Environment (defaults to `dev`) |

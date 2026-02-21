@@ -1,0 +1,64 @@
+---
+title: MCP Server
+description: Connect AI coding agents to your Strayl projects via the Model Context Protocol.
+---
+
+## Setup
+
+Run one command — it auto-detects which AI agents are installed and configures them all:
+
+```bash
+st mcp-init
+```
+
+That's it. A browser window opens, you log in, and the agent is connected.
+
+**Common options:**
+
+```bash
+# Skip all prompts
+st mcp-init -y
+
+# Install only to Claude Code
+st mcp-init -a claude-code -y
+
+# Install to Cursor and VS Code
+st mcp-init -a cursor -a vscode
+
+# Install to all supported agents, globally
+st mcp-init --all -g -y
+```
+
+**Supported agents:** `claude-code`, `claude-desktop`, `cursor`, `vscode`, `zed`, `codex`, `opencode`, `gemini-cli`, `goose`, `github-copilot-cli`
+
+## What you get
+
+Once connected, your agent can manage databases and environment variables in your Strayl projects without leaving the editor. See the full [tools reference](/docs/mcp/tools).
+
+## Manual installation
+
+If you prefer not to use the CLI:
+
+```bash
+npx add-mcp https://api.strayl.dev/mcp --name strayl
+```
+
+## Authentication
+
+The server uses **OAuth 2.0 with PKCE**. Agents that support OAuth (Claude Code, Cursor) start the flow automatically — no manual token copy-paste needed.
+
+For agents without OAuth support, pass a `Bearer` token in the MCP configuration header.
+
+### OAuth endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /.well-known/oauth-authorization-server` | OAuth server metadata |
+| `GET /oauth/authorize` | Start the authorization flow |
+| `GET /oauth/callback` | Callback after login |
+| `POST /oauth/token` | Exchange authorization code for token |
+| `POST /oauth/register` | Dynamic client registration (RFC 7591) |
+
+## How it works
+
+The server is **stateless** — each request is independent, no server-side session. All tool calls use standard HTTP request/response (no SSE streaming).
