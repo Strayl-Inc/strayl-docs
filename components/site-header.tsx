@@ -22,16 +22,9 @@ export function SiteHeader() {
         <Link aria-label="Home" className="-mt-0.5 flex shrink-0 items-center gap-2" href="/">
           <Image
             alt="Strayl"
-            className="size-7 rounded-md dark:hidden"
+            className="size-7 rounded-md dark:invert"
             height={28}
-            src="/logo-dark.webp"
-            width={28}
-          />
-          <Image
-            alt="Strayl"
-            className="hidden size-7 rounded-md dark:block"
-            height={28}
-            src="/logo-light.webp"
+            src="/logo.svg"
             width={28}
           />
           <span className="font-[family-name:var(--font-bitcount)] text-xl tracking-[0.03em]">
