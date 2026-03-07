@@ -31,7 +31,11 @@ st --version
 # Authenticate
 st login
 
-# Create a new Strayl project from an existing git repository
+# Clone an existing Strayl project (auto-checks out dev)
+st clone username/my-project
+cd my-project
+
+# Or create a new Strayl project from an existing git repository
 st init
 
 # Or link an existing local repository to a Strayl project
@@ -54,7 +58,7 @@ st pull
 | `st config` | Show or update CLI configuration |
 | `st init [name]` | Create a new Strayl project from this git repository |
 | `st link <username/project>` | Link this repository to an existing Strayl project |
-| `st clone <username/repo>` | Clone a Strayl repository |
+| `st clone <username/repo>` | Clone a Strayl repository (auto-checks out dev) |
 | `st status` | Show project info and pending change proposals |
 | `st push [branch]` | Push a feature branch and create a change proposal |
 | `st pull [dev\|main]` | Pull the latest dev or main branch from Strayl |

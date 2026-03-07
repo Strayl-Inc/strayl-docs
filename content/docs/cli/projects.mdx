@@ -74,20 +74,29 @@ Clone a Strayl repository to a local directory.
 st clone username/repo
 ```
 
-This is a wrapper around `git clone` that accepts the `username/repo` shorthand instead of a full URL. The `strayl` git credentials are used automatically.
+Accepts the `username/repo` shorthand instead of a full URL. If the repository has a `dev` branch, it is automatically checked out after cloning. Strayl git credentials are used automatically when you are logged in.
 
 ### Example
 
 ```bash
 st clone alice/my-app
-cd my-app
-npm install
-npm run dev
 ```
 
-You can also pass a full URL:
+Output:
+
+```
+✓ Cloned alice/my-app
+
+  Branch:  dev
+  Path:    ./my-app
+
+  cd my-app
+```
+
+You can also specify a custom directory or pass a full URL:
 
 ```bash
+st clone alice/my-app custom-dir
 st clone https://api.strayl.dev/alice/my-app.git
 ```
 
