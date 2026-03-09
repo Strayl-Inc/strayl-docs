@@ -16,10 +16,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://docs.strayl.dev"),
   title: "Strayl Docs",
   icons: {
-    icon: [
-      { url: "/logo-light.ico", media: "(prefers-color-scheme: dark)" },
-      { url: "/logo-dark.ico", media: "(prefers-color-scheme: light)" },
-    ],
+    icon: "/favicon.ico",
   },
 };
 
