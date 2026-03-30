@@ -1,11 +1,10 @@
-import { Bitcount_Prop_Single, Geist } from "next/font/google";
+import { Funnel_Display, Geist } from "next/font/google";
 import localFont from "next/font/local";
 
-export const fontBitcount = Bitcount_Prop_Single({
+export const fontDisplay = Funnel_Display({
   subsets: ["latin"],
-  variable: "--font-bitcount",
+  variable: "--font-display",
   display: "swap",
-  weight: "400",
 });
 
 export const fontSans = Geist({

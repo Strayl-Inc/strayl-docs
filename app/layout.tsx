@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 
 import { ThemeProvider } from "@/components/shared/theme-provider";
 import { SiteHeader } from "@/components/site-header";
-import { fontBitcount, fontMono, fontSans } from "@/lib/fonts";
+import { fontDisplay, fontMono, fontSans } from "@/lib/fonts";
 import {
   AnchoredToastProvider,
   ToastProvider,
@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${fontSans.variable} ${fontBitcount.variable} ${fontMono.variable} relative bg-sidebar font-sans text-foreground antialiased`}
+        className={`${fontSans.variable} ${fontDisplay.variable} ${fontMono.variable} relative bg-sidebar font-sans text-foreground antialiased`}
       >
         <ThemeProvider>
           <ToastProvider>

@@ -12,8 +12,8 @@ export function SiteFooter() {
           src="/logo.svg"
           width={28}
         />
-        <span className="font-[family-name:var(--font-bitcount)] text-xl tracking-[0.03em]">
-          STRAYL
+        <span className="font-[family-name:var(--font-display)] text-xl tracking-[0.03em]">
+          Strayl
         </span>
       </Link>
       <p className="text-muted-foreground text-sm">

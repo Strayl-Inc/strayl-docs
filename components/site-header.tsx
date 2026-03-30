@@ -27,8 +27,8 @@ export function SiteHeader() {
             src="/logo.svg"
             width={28}
           />
-          <span className="font-[family-name:var(--font-bitcount)] text-xl tracking-[0.03em]">
-            STRAYL
+          <span className="font-[family-name:var(--font-display)] text-xl tracking-[0.03em]">
+            Strayl
           </span>
           <span className="font-sans text-sm font-normal text-muted-foreground">
             docs
